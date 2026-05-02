@@ -1,11 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion"; // <-- 1. Import Variants here
 import { Button } from "../ui/Button";
 import { ArrowRight } from "lucide-react";
 
 export const Hero = () => {
-  const fadeUp = {
+  // 2. Explicitly type fadeUp as Variants
+  const fadeUp: Variants = { 
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };

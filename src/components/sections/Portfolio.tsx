@@ -22,7 +22,7 @@ const projects = [
     category: "Video", 
     description: "High-energy promotional video highlighting campus facilities and academics.",
     image: "/projects/eminence-promo.jpg",
-    link: "https://youtube.com/your-video-link"
+    link: "https://www.youtube.com/watch?v=f3DGejAotHw"
   },
   { 
     id: 3, 
@@ -34,7 +34,7 @@ const projects = [
   },
   { 
     id: 4, 
-    title: "Dhaka Flow Fest Activation", 
+    title: "Sonder", 
     category: "Marketing & Design", 
     description: "Brand representation and marketing collateral for Sonder and Happier.",
     image: "/projects/sonder.jpg", 
