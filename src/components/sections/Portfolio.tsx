@@ -1,56 +1,86 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
 
-const categories = ["All", "Websites", "Video", "Marketing & Design"];
+const categories = ["All", "Websites", "Video", "Social Media", "Brand Identity"];
 
-const projects = [
+type Project = {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  image: string;
+  link?: string;
+  galleryImages?: string[]; // Array to hold your social media posts/event photos
+};
+
+const projects: Project[] = [
   { 
     id: 1, 
-    title: "Fashion Asia Limited", 
-    category: "Websites", 
-    description: "Official corporate website engineered for a major manufacturing firm.",
-    image: "/projects/fashion-asia.jpg",
-    link: "https://www.fashionasialtd.com/"
+    title: "Eminence College: A Concern of Daffodil Group | Digital Strategy", 
+    category: "Social Media", 
+    description: "Educational social media designs, course promo posts, and event coverage.",
+    image: "/projects/eminence-campaign-cover.jpg",
+    galleryImages: [
+      "/projects/eminence-1.jpg", 
+      "/projects/eminence-2.jpg", 
+      "/projects/eminence-3.jpg",
+      "/projects/eminence-4.jpg"
+    ]
   },
   { 
     id: 2, 
-    title: "Eminence College Promo", 
-    category: "Video", 
-    description: "High-energy promotional video highlighting campus facilities and academics.",
-    image: "/projects/eminence-promo.jpg",
-    link: "https://www.youtube.com/watch?v=f3DGejAotHw"
+    title: "Sonder: Brand Activation", 
+    category: "Brand Identity", 
+    description: "Social media visual direction and event photography for a premium women's clothing brand.",
+    image: "/projects/sonder-campaign-cover.jpg",
+    galleryImages: [
+      "/projects/sonder-1.jpg", 
+      "/projects/sonder-2.jpg", 
+      "/projects/sonder-3.jpg"
+    ]
   },
   { 
     id: 3, 
-    title: "TekaPoysha - A money tracker app", 
+    title: "TekaPoysha : An essential money manager app", 
     category: "Websites", 
-    description: "Interactive web application built with Next.js, Firebase, and Cloud services.",
-    image: "/projects/tekapoysha.jpg", 
+    description: "A money manager app which supports Android/iOS/Windows and Data Sync across device",
+    image: "/projects/tekapoysha.jpg",
     link: "https://tekapoysha.vercel.app/"
   },
   { 
     id: 4, 
-    title: "Sonder", 
-    category: "Marketing & Design", 
-    description: "Brand representation and marketing collateral for Sonder and Happier.",
-    image: "/projects/sonder.jpg", 
-    link: "https://sonderbd.com/"
+    title: "Eminence College Promo", 
+    category: "Video", 
+    description: "High-energy promotional video highlighting campus facilities and academics.",
+    image: "/projects/eminence-video-thumbnail.jpg",
+    link: "https://www.youtube.com/watch?v=f3DGejAotHw"
   },
 ];
 
 export const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [selectedProject]);
 
   const filteredProjects = projects.filter(
     (project) => activeCategory === "All" || project.category === activeCategory
   );
 
   return (
-    <section id="portfolio" className="py-24 px-6 max-w-6xl mx-auto w-full">
+    <section id="portfolio" className="py-24 px-6 max-w-6xl mx-auto w-full relative">
+      {/* Header & Filters */}
       <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <motion.h2 
@@ -94,21 +124,24 @@ export const Portfolio = () => {
         </motion.div>
       </div>
 
+      {/* Portfolio Grid */}
       <motion.div layout className="grid md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project) => (
             <motion.div
               key={project.id}
-              layout
+              layoutId={`project-container-${project.id}`} // Links grid card to modal
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
               className="group cursor-pointer"
+              onClick={() => setSelectedProject(project)}
             >
-              <div className="w-full aspect-video bg-foreground/5 rounded-2xl mb-4 overflow-hidden relative border border-foreground/10 group">
-                
-                {/* The Next.js Optimized Image */}
+              <motion.div 
+                layoutId={`project-image-${project.id}`}
+                className="w-full aspect-video bg-foreground/5 rounded-2xl mb-4 overflow-hidden relative border border-foreground/10"
+              >
                 <Image 
                   src={project.image}
                   alt={project.title}
@@ -116,24 +149,103 @@ export const Portfolio = () => {
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-
-                {/* The Hover Overlay Link */}
-                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                  <div className="absolute inset-0 bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                    <div className="bg-background text-foreground rounded-full p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-xl">
-                      <ArrowUpRight size={24} />
-                    </div>
+                <div className="absolute inset-0 bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                  <div className="bg-background text-foreground rounded-full p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-xl font-bold text-sm">
+                    View Project
                   </div>
-                </a>
-                
-              </div>
-              <p className="text-sm font-medium text-muted mb-1">{project.category}</p>
-              <h4 className="text-xl font-bold mb-2">{project.title}</h4>
-              <p className="text-muted text-sm">{project.description}</p>
+                </div>
+              </motion.div>
+              <motion.p layoutId={`project-category-${project.id}`} className="text-sm font-medium text-muted mb-1">{project.category}</motion.p>
+              <motion.h4 layoutId={`project-title-${project.id}`} className="text-xl font-bold mb-2">{project.title}</motion.h4>
+              <motion.p layoutId={`project-desc-${project.id}`} className="text-muted text-sm line-clamp-2">{project.description}</motion.p>
             </motion.div>
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* The Expandable App-Like Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <>
+            {/* Blurred Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] cursor-pointer"
+              onClick={() => setSelectedProject(null)}
+            />
+
+            {/* Modal Content */}
+            <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 md:p-12 pointer-events-none">
+              <motion.div 
+                layoutId={`project-container-${selectedProject.id}`}
+                data-lenis-prevent="true" /* <-- THIS FIXES THE SCROLL HIJACKING */
+                className="bg-background w-full max-w-5xl max-h-[90vh] overflow-y-auto overscroll-contain rounded-[2rem] shadow-2xl border border-foreground/10 pointer-events-auto flex flex-col relative"
+              >
+                {/* Close Button */}
+                <button 
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-6 right-6 z-20 bg-background/80 backdrop-blur-md p-3 rounded-full text-foreground hover:scale-110 transition-transform"
+                >
+                  <X size={20} />
+                </button>
+
+                {/* Hero Image inside Modal */}
+                <motion.div layoutId={`project-image-${selectedProject.id}`} className="w-full h-[40vh] md:h-[50vh] relative shrink-0">
+                  <Image 
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+                </motion.div>
+
+                {/* Content Area */}
+                <div className="px-6 md:px-12 py-8 relative z-10 -mt-20">
+                  <motion.p layoutId={`project-category-${selectedProject.id}`} className="text-sm font-medium tracking-widest uppercase text-muted mb-2">
+                    {selectedProject.category}
+                  </motion.p>
+                  <motion.h4 layoutId={`project-title-${selectedProject.id}`} className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+                    {selectedProject.title}
+                  </motion.h4>
+                  <motion.p layoutId={`project-desc-${selectedProject.id}`} className="text-lg text-muted max-w-3xl mb-8 leading-relaxed">
+                    {selectedProject.description}
+                  </motion.p>
+
+                  {/* External Link Button (If Website or Video) */}
+                  {selectedProject.link && (
+                    <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform mb-12">
+                      View Live Project <ArrowUpRight size={18} />
+                    </a>
+                  )}
+
+                  {/* Social Media / Event Gallery Grid */}
+                  {selectedProject.galleryImages && (
+                    <div className="mt-8">
+                      <h5 className="text-xl font-bold mb-6 border-b border-foreground/10 pb-4">Campaign Assets</h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                        {selectedProject.galleryImages.map((img, index) => (
+                          <div key={index} className="relative w-full aspect-square bg-foreground/5 rounded-2xl overflow-hidden border border-foreground/10">
+                            <Image 
+                              src={img} 
+                              alt={`${selectedProject.title} asset ${index + 1}`} 
+                              fill 
+                              className="object-cover hover:scale-105 transition-transform duration-500"
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 };

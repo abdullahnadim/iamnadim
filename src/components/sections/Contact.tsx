@@ -29,8 +29,8 @@ export const Contact = () => {
               </div>
               <div>
                 <p className="text-sm text-muted font-medium">Email</p>
-                <a href="mailto:hello@example.com" className="text-lg font-bold hover:underline decoration-2 underline-offset-4 transition-all">
-                  hello@example.com
+                <a href="mailto:mirabdullahnadim@gmail.com" className="text-lg font-bold hover:underline decoration-2 underline-offset-4 transition-all">
+                  mirabdullahnadim@gmail.com
                 </a>
               </div>
             </div>
@@ -61,7 +61,7 @@ export const Contact = () => {
                 type="text" 
                 id="name"
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/30 focus:outline-none focus:border-background transition-colors"
-                placeholder="John Doe"
+                placeholder="Rahat Khan"
               />
             </div>
             <div>
@@ -70,7 +70,7 @@ export const Contact = () => {
                 type="email" 
                 id="email"
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/30 focus:outline-none focus:border-background transition-colors"
-                placeholder="john@company.com"
+                placeholder="rahat@mail.com"
               />
             </div>
             <div>

@@ -9,9 +9,9 @@ export const Footer = () => {
         </p>
         
         <div className="flex gap-6">
-          <a href="#" className="text-sm font-medium text-muted hover:text-foreground transition-colors">LinkedIn</a>
-          <a href="#" className="text-sm font-medium text-muted hover:text-foreground transition-colors">Behance</a>
-          <a href="#" className="text-sm font-medium text-muted hover:text-foreground transition-colors">GitHub</a>
+          <a href="https://www.linkedin.com/in/itsnadim/" className="text-sm font-medium text-muted hover:text-foreground transition-colors">LinkedIn</a>
+          <a href="https://www.behance.net/itsnadim" className="text-sm font-medium text-muted hover:text-foreground transition-colors">Behance</a>
+          <a href="https://github.com/abdullahnadim" className="text-sm font-medium text-muted hover:text-foreground transition-colors">GitHub</a>
         </div>
       </div>
     </footer>
