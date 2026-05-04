@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/ui/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { Capabilities } from "@/components/sections/Capabilities";
 import { About } from "@/components/sections/About";
 import { Services } from "@/components/sections/Services";
 import { Portfolio } from "@/components/sections/Portfolio";
@@ -13,6 +14,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between relative">
       <Navbar />
       <Hero />
+      <Capabilities />
       <About />
       <Services />
       <FeaturedWork />
