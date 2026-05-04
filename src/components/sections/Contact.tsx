@@ -11,7 +11,7 @@ export const Contact = () => {
     e.preventDefault();
     setStatus("submitting");
 
-    // FIX: Lock in the form reference before the async fetch happens
+    // Lock in the form reference before the async fetch happens
     const form = e.currentTarget;
     const formData = new FormData(form);
     
@@ -34,7 +34,7 @@ export const Contact = () => {
 
       if (response.ok) {
         setStatus("success");
-        form.reset(); // FIX: Calls reset on the saved variable
+        form.reset(); 
         setTimeout(() => setStatus("idle"), 4000); 
       } else {
         throw new Error("Failed to send");
