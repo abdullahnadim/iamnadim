@@ -1,12 +1,56 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Send } from "lucide-react";
+import { Mail, MapPin, Send, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { db } from "@/lib/firebase"; // <-- Import your Firebase config
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export const Contact = () => {
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("submitting");
+
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+    const botcheck = formData.get("botcheck");
+
+    // Spam protection: if the hidden field is filled, abort silently
+    if (botcheck) {
+      setStatus("success");
+      return;
+    }
+
+    try {
+      // Push data to Firebase Firestore
+      await addDoc(collection(db, "messages"), {
+        to: "hello@example.com", // Used later by the Firebase Email Extension
+        name: name,
+        replyTo: email,
+        message: message,
+        createdAt: serverTimestamp(),
+      });
+
+      setStatus("success");
+      e.currentTarget.reset(); 
+      setTimeout(() => setStatus("idle"), 4000); 
+      
+    } catch (error) {
+      console.error("Firebase Error:", error);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 4000);
+    }
+  };
+
   return (
     <section id="contact" className="py-24 px-6 max-w-6xl mx-auto w-full">
       <div className="grid md:grid-cols-2 gap-16">
+        
+        {/* Left Side: Contact Info */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -48,18 +92,24 @@ export const Contact = () => {
           </div>
         </motion.div>
 
+        {/* Right Side: The Form */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           className="bg-foreground text-background p-8 md:p-10 rounded-3xl"
         >
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Honeypot for spam bots */}
+            <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} tabIndex={-1} autoComplete="off" />
+
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-background/70 mb-2">Full Name</label>
               <input 
                 type="text" 
                 id="name"
+                name="name"
+                required
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/30 focus:outline-none focus:border-background transition-colors"
                 placeholder="Rahat Khan"
               />
@@ -69,6 +119,8 @@ export const Contact = () => {
               <input 
                 type="email" 
                 id="email"
+                name="email"
+                required
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/30 focus:outline-none focus:border-background transition-colors"
                 placeholder="rahat@mail.com"
               />
@@ -77,13 +129,23 @@ export const Contact = () => {
               <label htmlFor="message" className="block text-sm font-medium text-background/70 mb-2">Project Details</label>
               <textarea 
                 id="message"
+                name="message"
+                required
                 rows={4}
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/30 focus:outline-none focus:border-background transition-colors resize-none"
                 placeholder="Tell me about your goals, timeline, and budget..."
               ></textarea>
             </div>
-            <button className="w-full bg-background text-foreground py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform">
-              Send Message <Send size={18} />
+            
+            <button 
+              type="submit"
+              disabled={status === "submitting" || status === "success"}
+              className="w-full bg-background text-foreground py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100"
+            >
+              {status === "idle" && <><Send size={18} /> Send Message</>}
+              {status === "submitting" && <><Loader2 size={18} className="animate-spin" /> Sending...</>}
+              {status === "success" && <><CheckCircle2 size={18} className="text-green-600" /> Message Sent!</>}
+              {status === "error" && <><AlertCircle size={18} className="text-red-600" /> Error. Try Again.</>}
             </button>
           </form>
         </motion.div>
