@@ -87,7 +87,8 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter leading-[1] md:leading-[0.9] mb-6 uppercase px-2"
+          // FIX: Added break-words and scaled-down text sizes for smaller mobile devices
+          className="text-4xl min-[400px]:text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full break-words px-2"
         >
           MULTIDISCIPLINARY <br /> 
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 to-foreground">
@@ -99,7 +100,8 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl mb-10 font-medium px-4 leading-relaxed"
+          // FIX: Adjusted padding for better breathing room on small screens
+          className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
         >
           I don't just write code. I am a freelance digital artist bridging the gap between web development, high-end video editing, graphic design, and conversion-driven marketing.
         </motion.p>
