@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
+import { createPortal } from "react-dom"; // 1. Import createPortal
 
 const categories = ["All", "Websites", "Video", "Social Media", "Brand Identity"];
 
@@ -14,7 +15,7 @@ type Project = {
   description: string;
   image: string;
   link?: string;
-  galleryImages?: string[]; // Array to hold your social media posts/event photos
+  galleryImages?: string[]; 
 };
 
 const projects: Project[] = [
@@ -64,14 +65,23 @@ const projects: Project[] = [
 export const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isMounted, setIsMounted] = useState(false); // 2. Track when component mounts
+
+  // Hydration fix for Portals in Next.js
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "unset";
     }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [selectedProject]);
 
   const filteredProjects = projects.filter(
@@ -130,7 +140,7 @@ export const Portfolio = () => {
           {filteredProjects.map((project) => (
             <motion.div
               key={project.id}
-              layoutId={`project-container-${project.id}`} // Links grid card to modal
+              layoutId={`project-container-${project.id}`} 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
@@ -163,89 +173,92 @@ export const Portfolio = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* The Expandable App-Like Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <>
-            {/* Blurred Backdrop */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] cursor-pointer"
-              onClick={() => setSelectedProject(null)}
-            />
-
-            {/* Modal Content */}
-            <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 md:p-12 pointer-events-none">
+      {/* 3. The Expandable App-Like Modal (WRAPPED IN PORTAL) */}
+      {isMounted && typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {selectedProject && (
+            <>
+              {/* Blurred Backdrop */}
               <motion.div 
-                layoutId={`project-container-${selectedProject.id}`}
-                data-lenis-prevent="true" /* <-- THIS FIXES THE SCROLL HIJACKING */
-                className="bg-background w-full max-w-5xl max-h-[90vh] overflow-y-auto overscroll-contain rounded-[2rem] shadow-2xl border border-foreground/10 pointer-events-auto flex flex-col relative"
-              >
-                {/* Close Button */}
-                <button 
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-6 right-6 z-20 bg-background/80 backdrop-blur-md p-3 rounded-full text-foreground hover:scale-110 transition-transform"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] cursor-pointer"
+                onClick={() => setSelectedProject(null)}
+              />
+
+              {/* Modal Content */}
+              <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 md:p-12 pointer-events-none">
+                <motion.div 
+                  layoutId={`project-container-${selectedProject.id}`}
+                  data-lenis-prevent="true" 
+                  className="bg-background w-full max-w-5xl max-h-[90vh] overflow-y-auto overscroll-contain rounded-[2rem] shadow-2xl border border-foreground/10 pointer-events-auto flex flex-col relative"
                 >
-                  <X size={20} />
-                </button>
+                  {/* Close Button */}
+                  <button 
+                    onClick={() => setSelectedProject(null)}
+                    className="absolute top-6 right-6 z-20 bg-background/80 backdrop-blur-md p-3 rounded-full text-foreground hover:scale-110 transition-transform"
+                  >
+                    <X size={20} />
+                  </button>
 
-                {/* Hero Image inside Modal */}
-                <motion.div layoutId={`project-image-${selectedProject.id}`} className="w-full h-[40vh] md:h-[50vh] relative shrink-0">
-                  <Image 
-                    src={selectedProject.image}
-                    alt={selectedProject.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-                </motion.div>
+                  {/* Hero Image inside Modal */}
+                  <motion.div layoutId={`project-image-${selectedProject.id}`} className="w-full h-[40vh] md:h-[50vh] relative shrink-0">
+                    <Image 
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+                  </motion.div>
 
-                {/* Content Area */}
-                <div className="px-6 md:px-12 py-8 relative z-10 -mt-20">
-                  <motion.p layoutId={`project-category-${selectedProject.id}`} className="text-sm font-medium tracking-widest uppercase text-muted mb-2">
-                    {selectedProject.category}
-                  </motion.p>
-                  <motion.h4 layoutId={`project-title-${selectedProject.id}`} className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-                    {selectedProject.title}
-                  </motion.h4>
-                  <motion.p layoutId={`project-desc-${selectedProject.id}`} className="text-lg text-muted max-w-3xl mb-8 leading-relaxed">
-                    {selectedProject.description}
-                  </motion.p>
+                  {/* Content Area */}
+                  <div className="px-6 md:px-12 py-8 relative z-10 -mt-20">
+                    <motion.p layoutId={`project-category-${selectedProject.id}`} className="text-sm font-medium tracking-widest uppercase text-muted mb-2">
+                      {selectedProject.category}
+                    </motion.p>
+                    <motion.h4 layoutId={`project-title-${selectedProject.id}`} className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+                      {selectedProject.title}
+                    </motion.h4>
+                    <motion.p layoutId={`project-desc-${selectedProject.id}`} className="text-lg text-muted max-w-3xl mb-8 leading-relaxed">
+                      {selectedProject.description}
+                    </motion.p>
 
-                  {/* External Link Button (If Website or Video) */}
-                  {selectedProject.link && (
-                    <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform mb-12">
-                      View Live Project <ArrowUpRight size={18} />
-                    </a>
-                  )}
+                    {/* External Link Button */}
+                    {selectedProject.link && (
+                      <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 rounded-full font-bold hover:scale-105 transition-transform mb-12">
+                        View Live Project <ArrowUpRight size={18} />
+                      </a>
+                    )}
 
-                  {/* Social Media / Event Gallery Grid */}
-                  {selectedProject.galleryImages && (
-                    <div className="mt-8">
-                      <h5 className="text-xl font-bold mb-6 border-b border-foreground/10 pb-4">Campaign Assets</h5>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                        {selectedProject.galleryImages.map((img, index) => (
-                          <div key={index} className="relative w-full aspect-square bg-foreground/5 rounded-2xl overflow-hidden border border-foreground/10">
-                            <Image 
-                              src={img} 
-                              alt={`${selectedProject.title} asset ${index + 1}`} 
-                              fill 
-                              className="object-cover hover:scale-105 transition-transform duration-500"
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                            />
-                          </div>
-                        ))}
+                    {/* Social Media / Event Gallery Grid */}
+                    {selectedProject.galleryImages && (
+                      <div className="mt-8">
+                        <h5 className="text-xl font-bold mb-6 border-b border-foreground/10 pb-4">Campaign Assets</h5>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                          {selectedProject.galleryImages.map((img, index) => (
+                            <div key={index} className="relative w-full aspect-square bg-foreground/5 rounded-2xl overflow-hidden border border-foreground/10">
+                              <Image 
+                                src={img} 
+                                alt={`${selectedProject.title} asset ${index + 1}`} 
+                                fill 
+                                className="object-cover hover:scale-105 transition-transform duration-500"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 };
