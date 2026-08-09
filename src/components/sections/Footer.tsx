@@ -35,7 +35,16 @@ export const Footer = () => {
             © {currentYear} Abdullah Nadim. All rights reserved.
           </p>
           
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
+            
+            {/* NEW INTERNAL NAVIGATION TO TOOLS PAGE */}
+            <Link 
+              href="/tools" 
+              className="text-sm font-bold text-foreground hover:text-foreground/70 transition-colors flex items-center gap-1"
+            >
+              Apps & Tools <span className="text-foreground/40">/</span>
+            </Link>
+
             <a 
               href="https://www.linkedin.com/in/itsnadim/" 
               target="_blank" 

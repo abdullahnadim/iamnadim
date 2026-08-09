@@ -87,8 +87,8 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          // FIX: Added break-words and scaled-down text sizes for smaller mobile devices
-          className="text-4xl min-[400px]:text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full break-words px-2"
+          // FIX: Replaced rigid breakpoints with fluid typography (clamp) to prevent mobile overflow
+          className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full px-2"
         >
           MULTIDISCIPLINARY <br /> 
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 to-foreground">
@@ -100,7 +100,6 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          // FIX: Adjusted padding for better breathing room on small screens
           className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
         >
           I don't just write code. I am a freelance digital artist bridging the gap between web development, high-end video editing, graphic design, and conversion-driven marketing.
@@ -135,7 +134,7 @@ export const Hero = () => {
         {/* Floating Engineering Pill */}
         <div className="hidden md:flex absolute bottom-1/3 left-[10%] lg:left-[20%] px-6 py-3 bg-foreground text-background font-bold text-sm rounded-full shadow-[0_0_40px_rgba(0,0,0,0.3)] -rotate-12 backdrop-blur-md items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          Website Managment
+          Website Management
         </div>
       </motion.div>
     </section>

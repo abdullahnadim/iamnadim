@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { BackToTop } from "@/components/ui/BackToTop";
+import { CommsLink } from "@/components/ui/CommsLink";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,11 @@ export default function RootLayout({
         <SmoothScroll>
           {children}
         </SmoothScroll>
+        {/* Global Floating Modules */}
+        <CommsLink />
+        {/* Terminal Ascent Module injected globally */}
+        <BackToTop />
+        
       </body>
     </html>
   );
