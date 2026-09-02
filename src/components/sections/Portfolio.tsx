@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
-import { createPortal } from "react-dom"; // 1. Import createPortal
+import { createPortal } from "react-dom";
 
-const categories = ["All", "Websites", "Video", "Social Media", "Brand Identity"];
+// 1. Added "Tools" to the categories
+const categories = ["All", "Websites", "Tools", "Video", "Social Media", "Brand Identity"];
 
 type Project = {
   id: number;
@@ -18,6 +19,7 @@ type Project = {
   galleryImages?: string[]; 
 };
 
+// 2. Added the 3 new tools to the projects array
 const projects: Project[] = [
   { 
     id: 1, 
@@ -60,12 +62,36 @@ const projects: Project[] = [
     image: "/projects/eminence-video-thumbnail.jpg",
     link: "https://www.youtube.com/watch?v=f3DGejAotHw"
   },
+  { 
+    id: 5, 
+    title: "LocalRename", 
+    category: "Tools", 
+    description: "Zero-server batch file renamer and image converter with native system theme detection. Built with absolute data privacy in mind using the modern File System Access API.",
+    image: "/projects/localrename-cover.jpg",
+    link: "https://localrename.vercel.app/" 
+  },
+  { 
+    id: 6, 
+    title: "Chobi-Karigor", 
+    category: "Tools", 
+    description: "Image processing and upscaling web application featuring dynamic UI controls and real-time model pricing integration.",
+    image: "/projects/chobi-karigor-cover.jpg",
+    link: "https://chobi-karigor.vercel.app/" 
+  },
+  { 
+    id: 7, 
+    title: "Ondhokar", 
+    category: "Tools", 
+    description: "A localized utility application to track and predict scheduled power outages. It parses complex DESCO feeder data into a clean, searchable interface for Dhaka residents.",
+    image: "/projects/ondhokar-cover.jpg",
+    link: "https://ondhokar.vercel.app/" 
+  }
 ];
 
 export const Portfolio = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isMounted, setIsMounted] = useState(false); // 2. Track when component mounts
+  const [isMounted, setIsMounted] = useState(false);
 
   // Hydration fix for Portals in Next.js
   useEffect(() => {
@@ -137,7 +163,7 @@ export const Portfolio = () => {
       {/* Portfolio Grid */}
       <motion.div layout className="grid md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, index) => ( // Added index here
             <motion.div
               key={project.id}
               layoutId={`project-container-${project.id}`} 
@@ -157,7 +183,8 @@ export const Portfolio = () => {
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Fixed sizes
+                  priority={index < 2} // Preloads the first 2 images for LCP optimization
                 />
                 <div className="absolute inset-0 bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
                   <div className="bg-background text-foreground rounded-full p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-xl font-bold text-sm">
@@ -173,7 +200,7 @@ export const Portfolio = () => {
         </AnimatePresence>
       </motion.div>
 
-      {/* 3. The Expandable App-Like Modal (WRAPPED IN PORTAL) */}
+      {/* The Expandable App-Like Modal (WRAPPED IN PORTAL) */}
       {isMounted && typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
           {selectedProject && (
@@ -209,6 +236,8 @@ export const Portfolio = () => {
                       alt={selectedProject.title}
                       fill
                       className="object-cover"
+                      sizes="100vw" // Fixed sizes
+                      priority // Forces modal image to load instantly
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
                   </motion.div>
@@ -244,7 +273,8 @@ export const Portfolio = () => {
                                 alt={`${selectedProject.title} asset ${index + 1}`} 
                                 fill 
                                 className="object-cover hover:scale-105 transition-transform duration-500"
-                                sizes="(max-width: 768px) 100vw, 50vw"
+                                sizes="(max-width: 768px) 100vw, 50vw" // Fixed sizes
+                                loading="lazy" // Ensures off-screen gallery images defer loading
                               />
                             </div>
                           ))}
