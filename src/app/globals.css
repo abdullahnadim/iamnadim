@@ -15,3 +15,20 @@
     -moz-osx-font-smoothing: grayscale;
   }
 }
+
+/* LIGHTHOUSE FIX: Native CSS animation for Above-The-Fold elements */
+@keyframes fade-in-up {
+  0% { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.hero-animate {
+  opacity: 0; /* Ensures it stays hidden until the animation starts */
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

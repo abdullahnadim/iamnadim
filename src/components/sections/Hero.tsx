@@ -83,18 +83,16 @@ export const Hero = () => {
           Abdullah Nadim
         </motion.div>
         
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          // FIX: Replaced rigid breakpoints with fluid typography (clamp) to prevent mobile overflow
-          className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full px-2"
+        {/* LIGHTHOUSE FIX: Swapped to native CSS animation for immediate render */}
+        <h1 
+          className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full px-2 hero-animate"
+          style={{ animationDelay: "0.2s" }}
         >
           MULTIDISCIPLINARY <br /> 
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 to-foreground">
             CREATOR.
           </span>
-        </motion.h1>
+        </h1>
         
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -125,13 +123,11 @@ export const Hero = () => {
         style={{ x: fgX, y: fgY }}
         className="absolute inset-0 z-20 pointer-events-none"
       >
-        {/* Floating Content Pill */}
         <div className="hidden md:flex absolute top-1/4 right-[10%] lg:right-[20%] px-5 py-3 bg-background/40 border border-foreground/10 rounded-2xl backdrop-blur-xl shadow-2xl rotate-6 items-center gap-3">
           <div className="w-4 h-4 rounded-full border-2 border-foreground/50" />
           <span className="font-bold text-sm text-foreground/80">Content & Motion</span>
         </div>
 
-        {/* Floating Engineering Pill */}
         <div className="hidden md:flex absolute bottom-1/3 left-[10%] lg:left-[20%] px-6 py-3 bg-foreground text-background font-bold text-sm rounded-full shadow-[0_0_40px_rgba(0,0,0,0.3)] -rotate-12 backdrop-blur-md items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           Website Management

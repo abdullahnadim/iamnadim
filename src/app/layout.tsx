@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import dynamic from 'next/dynamic';
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { BackToTop } from "@/components/ui/BackToTop";
-import { CommsLink } from "@/components/ui/CommsLink";
-import { CommandTerminal } from "@/components/ui/CommandTerminal";
+
+// LIGHTHOUSE FIX: Deferring heavy interactive overlays until after initial paint
+const CommandTerminal = dynamic(() => import("@/components/ui/CommandTerminal").then(mod => mod.CommandTerminal), { ssr: false });
+const CommsLink = dynamic(() => import("@/components/ui/CommsLink").then(mod => mod.CommsLink), { ssr: false });
+const BackToTop = dynamic(() => import("@/components/ui/BackToTop").then(mod => mod.BackToTop), { ssr: false });
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,10 +28,9 @@ export default function RootLayout({
           {children}
         </SmoothScroll>
         
-        {/* Global Floating Modules */}
+        {/* Global Floating Modules - Now Lazy Loaded */}
         <CommandTerminal />
         <CommsLink />
-        {/* Terminal Ascent Module injected globally */}
         <BackToTop />
         
       </body>
