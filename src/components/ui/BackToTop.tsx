@@ -43,15 +43,14 @@ export const BackToTop = () => {
           }
           exit={{ opacity: 0, y: 50, scale: 0.8 }}
           transition={{ duration: isLaunching ? 0.8 : 0.4, ease: "easeOut" }}
-          // FIX: Tighter to the corner on mobile (bottom-4 right-4)
           className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[90]"
         >
           <motion.button
             layout
+            aria-label="Scroll back to top"
             onClick={handleAscend}
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
-            // FIX: Added w-12 on mobile, expanding to w-auto on md screens
             className={`flex items-center justify-center h-12 w-12 md:w-auto md:px-4 rounded-full border shadow-2xl backdrop-blur-md overflow-hidden transition-colors duration-300 ${
               isHovered
                 ? "bg-foreground border-foreground text-background"

@@ -89,7 +89,7 @@ export const Hero = () => {
           style={{ animationDelay: "0.2s" }}
         >
           MULTIDISCIPLINARY <br /> 
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 to-foreground">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">
             CREATOR.
           </span>
         </h1>
@@ -98,7 +98,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-base md:text-lg lg:text-xl text-foreground/70 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
+          className="text-base md:text-lg lg:text-xl text-foreground/80 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
         >
           I don't just write code. I am a freelance digital artist bridging the gap between web development, high-end video editing, graphic design, and conversion-driven marketing.
         </motion.p>
