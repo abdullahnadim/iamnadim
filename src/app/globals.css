@@ -4,7 +4,8 @@
   --color-background: #ffffff;
   --color-foreground: #0a0a0a;
   --color-accent: #171717;
-  --color-muted: #737373;
+  /* LIGHTHOUSE FIX: Darkened from #737373 to #525252 to guarantee WCAG AAA contrast compliance */
+  --color-muted: #525252;
 }
 
 @layer base {

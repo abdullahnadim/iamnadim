@@ -1,11 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-// Safely lazy load heavy interactive overlays only on the client
-const CommandTerminal = dynamic(() => import("@/components/ui/CommandTerminal").then(mod => mod.CommandTerminal), { ssr: false });
-const CommsLink = dynamic(() => import("@/components/ui/CommsLink").then(mod => mod.CommsLink), { ssr: false });
-const BackToTop = dynamic(() => import("@/components/ui/BackToTop").then(mod => mod.BackToTop), { ssr: false });
+// REMOVED: next/dynamic. 
+// Standard imports allow Next.js to SSR the initial HTML structure instantly, 
+// preventing post-paint DOM mutations and layout thrashing on Desktop.
+import { CommandTerminal } from "@/components/ui/CommandTerminal";
+import { CommsLink } from "@/components/ui/CommsLink";
+import { BackToTop } from "@/components/ui/BackToTop";
 
 export const GlobalModules = () => {
   return (
