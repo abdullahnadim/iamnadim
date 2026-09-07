@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { GlobalModules } from "@/components/ui/GlobalModules";
+import { MotionProvider } from "@/components/providers/MotionProvider";
 
 // LIGHTHOUSE FIX: Added display: "swap" to prevent Flash of Invisible Text (FOIT) and improve Mobile FCP
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -20,13 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
-        
-        {/* Global Floating Modules - Safely Lazy Loaded via Client Wrapper */}
-        <GlobalModules />
-        
+        <MotionProvider>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+          
+          {/* Global Floating Modules - Safely Lazy Loaded via Client Wrapper */}
+          <GlobalModules />
+        </MotionProvider>
       </body>
     </html>
   );

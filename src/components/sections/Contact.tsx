@@ -5,8 +5,14 @@ import { motion } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
 
 export const Contact = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    email: "", 
+    message: "", 
+    botcheck: false 
+  });
   const [isSent, setIsSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   
   const trackRef = useRef<HTMLDivElement>(null);
   const [trackWidth, setTrackWidth] = useState(0);
@@ -22,20 +28,40 @@ export const Contact = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = async (event: any, info: any) => {
+    // Triggers when the slider is dragged 70% of the way across
     if (info.offset.x > trackWidth * 0.7) {
-      setIsSent(true);
-      console.log("Form Data Sent:", formData);
+      setIsSending(true);
+      
+      try {
+        const response = await fetch('/api/contact', { 
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          setIsSent(true);
+        } else {
+          console.error("Transmission failed.");
+          setIsSending(false); 
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setIsSending(false);
+      }
     }
   };
 
   const handleReset = () => {
     setIsSent(false);
-    setFormData({ name: "", email: "", message: "" });
+    setIsSending(false);
+    setFormData({ name: "", email: "", message: "", botcheck: false });
   };
 
   return (
-    // FIX: Increased max-w-4xl to max-w-6xl so the side-by-side layout isn't squished
     <section id="contact" className="py-24 px-4 sm:px-6 max-w-6xl mx-auto w-full">
       <div className="mb-16 text-center md:text-left">
         <h2 className="text-sm font-medium tracking-widest uppercase text-muted mb-4 flex items-center justify-center md:justify-start gap-2">
@@ -43,11 +69,10 @@ export const Contact = () => {
           Initiate Project
         </h2>
         <h3 className="text-4xl md:text-6xl font-black tracking-tighter">
-          Let's build something.
+          Let's engineer your <br className="hidden md:block" /> next digital ecosystem.
         </h3>
       </div>
 
-      {/* FIX: Adjusted gap and breakpoints for better alignment */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
         
         {/* Left Side: Contact Info */}
@@ -59,14 +84,12 @@ export const Contact = () => {
           <div className="space-y-8">
             <div className="group w-max">
               <p className="text-sm font-bold text-foreground/40 tracking-widest uppercase mb-2">Email</p>
-              {/* FIX: Updated to correct email */}
               <a href="mailto:mirabdullahnadim@gmail.com" className="text-xl font-bold hover:text-foreground/70 transition-colors">
                 mirabdullahnadim@gmail.com
               </a>
             </div>
             
             <div className="group w-max">
-              {/* FIX: Removed aggressive local time, replaced with standard location */}
               <p className="text-sm font-bold text-foreground/40 tracking-widest uppercase mb-2">Location</p>
               <p className="text-xl font-bold text-foreground">
                 Dhaka, Bangladesh
@@ -84,6 +107,19 @@ export const Contact = () => {
               exit={{ opacity: 0 }}
               className="flex flex-col gap-6"
             >
+              
+              {/* SPAM HONEYPOT - Hidden from real users, filled by bots */}
+              <input 
+                type="checkbox" 
+                name="botcheck" 
+                className="hidden" 
+                style={{ display: 'none' }}
+                checked={formData.botcheck}
+                onChange={(e) => setFormData({ ...formData, botcheck: e.target.checked })}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div className="relative">
                 <motion.input
                   whileFocus={{ scale: 0.99, y: 2 }}
@@ -133,18 +169,18 @@ export const Contact = () => {
                 >
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <span className="text-sm font-bold text-foreground/30 tracking-widest uppercase">
-                      Slide to Transmit
+                      {isSending ? "Transmitting..." : "Slide to Transmit"}
                     </span>
                   </div>
 
                   <motion.div
-                    drag="x"
+                    drag={isSending ? false : "x"}
                     dragConstraints={trackRef}
-                    dragSnapToOrigin={true}
+                    dragSnapToOrigin={!isSent}
                     dragElastic={0.1}
                     onDragEnd={handleDragEnd}
                     whileDrag={{ scale: 0.95 }}
-                    className="w-14 h-14 bg-foreground/90 rounded-full flex items-center justify-center cursor-grab active:cursor-grabbing absolute left-1 shadow-lg z-10"
+                    className={`w-14 h-14 rounded-full flex items-center justify-center absolute left-1 shadow-lg z-10 ${isSending ? 'bg-foreground/50 cursor-not-allowed' : 'bg-foreground/90 cursor-grab active:cursor-grabbing'}`}
                   >
                     <ArrowRight className="text-background" size={20} />
                   </motion.div>

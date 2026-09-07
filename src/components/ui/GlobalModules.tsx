@@ -1,15 +1,14 @@
 "use client";
 
-// REMOVED: next/dynamic. 
-// Standard imports allow Next.js to SSR the initial HTML structure instantly, 
-// preventing post-paint DOM mutations and layout thrashing on Desktop.
 import { CommandTerminal } from "@/components/ui/CommandTerminal";
 import { CommsLink } from "@/components/ui/CommsLink";
 import { BackToTop } from "@/components/ui/BackToTop";
+import { CustomCursor } from "@/components/ui/CustomCursor"; // Import it here
 
 export const GlobalModules = () => {
   return (
     <>
+      <CustomCursor /> {/* Add it to the wrapper */}
       <CommandTerminal />
       <CommsLink />
       <BackToTop />

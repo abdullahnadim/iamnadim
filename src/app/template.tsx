@@ -1,10 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+// LIGHTHOUSE FIX: Imported 'm' instead of 'motion' to support LazyMotion and strict tree-shaking
+import { m } from "framer-motion";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
-    <motion.div
+    <m.div
       // 1. Initial state (when the page first starts loading)
       initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
       
@@ -18,6 +19,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

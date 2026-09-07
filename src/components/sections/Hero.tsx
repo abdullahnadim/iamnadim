@@ -2,7 +2,9 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import { KineticText } from "@/components/ui/KineticText";
 import { Button } from "@/components/ui/Button"; 
+
 
 export const Hero = () => {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
@@ -84,23 +86,28 @@ export const Hero = () => {
         </motion.div>
         
         {/* LIGHTHOUSE FIX: Swapped to native CSS animation for immediate render, removed animation delay */}
-        <h1 
-          className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full px-2 hero-animate"
-        >
-          MULTIDISCIPLINARY <br /> 
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">
-            CREATOR.
-          </span>
-        </h1>
+        {/* Cinematic Kinetic Typography */}
+        <div className="mb-6 flex flex-col items-center justify-center w-full px-2">
+          <KineticText 
+            text="MULTIDISCIPLINARY" 
+            className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] uppercase justify-center" 
+            delay={0.1}
+          />
+          <KineticText 
+            text="CREATOR." 
+            className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] uppercase justify-center text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground" 
+            delay={0.4} 
+          />
+        </div>
         
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-base md:text-lg lg:text-xl text-foreground/80 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
-        >
-          I don't just write code. I am a freelance digital artist bridging the gap between web development, high-end video editing, graphic design, and conversion-driven marketing.
-        </motion.p>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.4 }}
+  className="text-base md:text-lg lg:text-xl text-foreground/80 max-w-2xl mb-10 font-medium px-6 leading-relaxed"
+>
+  Bridging the gap between high-performance web development, cinematic motion, and conversion-driven design. Let's engineer your next digital experience.
+</motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
