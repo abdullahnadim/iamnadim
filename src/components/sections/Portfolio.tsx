@@ -163,7 +163,7 @@ export const Portfolio = () => {
       {/* Portfolio Grid */}
       <motion.div layout className="grid md:grid-cols-2 gap-6">
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => ( // Added index here
+          {filteredProjects.map((project, index) => ( 
             <motion.div
               key={project.id}
               layoutId={`project-container-${project.id}`} 
@@ -183,8 +183,8 @@ export const Portfolio = () => {
                   alt={project.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Fixed sizes
-                  priority={index < 2} // Preloads the first 2 images for LCP optimization
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority={index < 2} 
                 />
                 <div className="absolute inset-0 bg-background/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
                   <div className="bg-background text-foreground rounded-full p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-xl font-bold text-sm">
@@ -224,6 +224,7 @@ export const Portfolio = () => {
                   {/* Close Button */}
                   <button 
                     onClick={() => setSelectedProject(null)}
+                    aria-label="Close project details"
                     className="absolute top-6 right-6 z-20 bg-background/80 backdrop-blur-md p-3 rounded-full text-foreground hover:scale-110 transition-transform"
                   >
                     <X size={20} />
@@ -236,8 +237,8 @@ export const Portfolio = () => {
                       alt={selectedProject.title}
                       fill
                       className="object-cover"
-                      sizes="100vw" // Fixed sizes
-                      priority // Forces modal image to load instantly
+                      sizes="100vw"
+                      priority 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
                   </motion.div>
@@ -273,8 +274,8 @@ export const Portfolio = () => {
                                 alt={`${selectedProject.title} asset ${index + 1}`} 
                                 fill 
                                 className="object-cover hover:scale-105 transition-transform duration-500"
-                                sizes="(max-width: 768px) 100vw, 50vw" // Fixed sizes
-                                loading="lazy" // Ensures off-screen gallery images defer loading
+                                sizes="(max-width: 768px) 100vw, 50vw" 
+                                loading="lazy" 
                               />
                             </div>
                           ))}

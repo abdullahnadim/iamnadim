@@ -83,10 +83,9 @@ export const Hero = () => {
           Abdullah Nadim
         </motion.div>
         
-        {/* LIGHTHOUSE FIX: Swapped to native CSS animation for immediate render */}
+        {/* LIGHTHOUSE FIX: Swapped to native CSS animation for immediate render, removed animation delay */}
         <h1 
           className="text-[clamp(2.2rem,9vw,5.5rem)] font-black tracking-tighter leading-[1.1] md:leading-[0.9] mb-6 uppercase w-full px-2 hero-animate"
-          style={{ animationDelay: "0.2s" }}
         >
           MULTIDISCIPLINARY <br /> 
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground/70 to-foreground">

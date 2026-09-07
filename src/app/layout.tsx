@@ -4,7 +4,8 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { GlobalModules } from "@/components/ui/GlobalModules";
 
-const inter = Inter({ subsets: ["latin"] });
+// LIGHTHOUSE FIX: Added display: "swap" to prevent Flash of Invisible Text (FOIT) and improve Mobile FCP
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "Abdullah Nadim | Multi-Disciplinary Digital Professional",
